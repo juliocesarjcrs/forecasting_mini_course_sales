@@ -1,0 +1,21 @@
+FROM python:3.11.3-slim-buster
+
+WORKDIR /code
+
+COPY ./requirements /code/requirements
+
+RUN apt-get update && \
+    apt-get install -y locales && \
+    sed -i -e 's/# es_CO.UTF-8 UTF-8/es_CO.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales
+
+# Avoid [notice] A new release of pip available
+RUN pip install --no-cache-dir --upgrade pip
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements/requirements_jupyter.txt
+
+RUN pip install jupyterlab
+
+EXPOSE 8888
+
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]

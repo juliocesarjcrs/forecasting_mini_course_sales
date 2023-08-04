@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  jupyter-kaggle:
+    build:
+      context: .
+      dockerfile: DockerFile.jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./src:/code/src
+      - ./data:/code/data
+      - ./models:/code/models
+      - ./reports:/code/reports
+
