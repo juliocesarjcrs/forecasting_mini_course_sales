@@ -7,7 +7,9 @@ class DataExplorer:
 
     def __init__(self, utils):
         self.utils = utils
-        data_path = 'data/raw/train.csv'
+        # data_path = 'data/raw/train.csv'
+        data_path = 'data/processed/df_time_monthly_without_outliers.csv'
+        # self.data_path = data_path
         self.data = self.utils.load_from_csv(data_path, 'date')
 
     def get_dataframe(self):

@@ -270,3 +270,64 @@ class Utils:
         result_df = pd.DataFrame(model_metrics)
         file_path_to_save = os.path.join(directory, file_name)
         result_df.to_csv(file_path_to_save, index=False)
+
+    def plot_time_series_individual_model(self, train_y, test_y, y_pred, output_dir, names_folder, title='Serie de Tiempo - Train, Test y Predicciones'):
+        """
+        Grafica los datos de entrenamiento (train), prueba (test) y las predicciones de un modelo de series de tiempo.
+
+        Args:
+            train_y (pandas.Series): Serie de tiempo de los datos de entrenamiento.
+            test_y (pandas.Series): Serie de tiempo de los datos de prueba.
+            y_pred (pandas.Series): Serie de tiempo de las predicciones.
+
+        Returns:
+            None (Muestra el gráfico utilizando Plotly)
+
+        """
+        if not isinstance(train_y, pd.core.series.Series):
+            raise TypeError("El objeto  train_y no es una instancia de pandas.core.series.Series.")
+        if not isinstance(test_y, pd.core.series.Series):
+            raise TypeError("El objeto  test_y no es una instancia de pandas.core.series.Series.")
+        if not isinstance(y_pred, pd.core.series.Series):
+            raise TypeError("El objeto  y_pred no es una instancia de pandas.core.series.Series.")
+        # Concatenar los datos de entrenamiento, prueba y predicciones en un solo DataFrame
+        df = pd.DataFrame(
+            {'Train': train_y, 'Test': test_y, 'Predictions': y_pred})
+
+        # Crear una figura de Plotly
+        fig = go.Figure()
+
+        # Agregar la serie de tiempo de entrenamiento al gráfico
+        fig.add_trace(go.Scatter(x=train_y.index, y=train_y, name='Train'))
+
+        # Agregar la serie de tiempo de prueba al gráfico
+        fig.add_trace(go.Scatter(x=test_y.index, y=test_y, name='Test'))
+
+        # Agregar la serie de tiempo de predicciones al gráfico
+        fig.add_trace(go.Scatter(x=y_pred.index, y=y_pred, name='Predictions'))
+
+        # Personalizar el diseño del gráfico
+        fig.update_layout(title=title,
+                          xaxis_title='Fecha',
+                          yaxis_title='Valor',
+                          legend=dict(x=0, y=1),
+                          height=500)
+
+    # Mostrar el gráfico
+
+        model = names_folder['model_name']
+
+
+        # Si se proporciona un directorio de salida, guardar la figura en el archivo dentro de la carpeta correspondiente
+        if output_dir:
+            # Crear carpetas para país y tienda si no existen
+            output_model_dir = os.path.join(output_dir, model)
+            os.makedirs(output_model_dir, exist_ok=True)
+
+            # Crear el nombre del archivo de salida en función del país y la tienda
+            output_file = os.path.join(
+                output_model_dir, f'{model}_model.html')
+            fig.write_html(output_file)
+        else:
+            fig.show()
+

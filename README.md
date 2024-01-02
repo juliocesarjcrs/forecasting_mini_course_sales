@@ -109,33 +109,14 @@ uvicorn api.main:app --reload
 Correr lo siguiente ``` python main.py ```
 
 ## Desarrollo con  Docker
-En una terminal en la raiz del proyecto correr la  api
-```
-docker compose up devtimeseries
-docker compose up --build  devtimeseries # si se necesita reconstruir la imagen
-```
-El puerto de la imagen en dev 8000 de la izquierda es el que voy a exponer
-http://localhost:8000/
 
-For instance, would publish port 80 from the container to port 8080 on the host or external network.
-
-docker run -p 8080:80
-* Para instalar correr el código base con docker.
-Ej: src/main.py
-o para instalar nuevas liibrerias como "pip install httpx"
-Se puede usar:
-```
-docker compose run devtimeseries python src/main.py
-docker compose run devtimeseries pip install httpx
-docker compose run devtimeseries pip install --upgrade pip
-# ejecutar test
-docker compose exec devtimeseries pytest
-
-```
-### Correr jupyter notebooks
+### Run code in python
+First, all of you need to set up the container. Then, you need to establish the flat type_process
 
 ``` docker compose up jupyter-kaggle
+docker compose run jupyter-kaggle python src/main.py --type_process SELECT_MODEL
 docker compose run -e DISPLAY=$DISPLAY -e TZ=Europe/Madrid jupyter-kaggle python src/main.py
+
 ```
 
 ### Para instalar nuevas librerias.
